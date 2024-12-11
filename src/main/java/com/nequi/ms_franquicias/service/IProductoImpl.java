@@ -8,6 +8,7 @@ import java.util.stream.StreamSupport;
 import org.springframework.stereotype.Service;
 
 import com.nequi.ms_franquicias.entities.Producto;
+import com.nequi.ms_franquicias.entities.ProductoConSucursalDto;
 import com.nequi.ms_franquicias.entities.ProductoDto;
 import com.nequi.ms_franquicias.entities.Sucursal;
 import com.nequi.ms_franquicias.entities.SucursalDto;
@@ -60,23 +61,34 @@ public class IProductoImpl implements IProductoService {
     }
 
     @Override
-    public List<ProductoDto> getProductosConMasStockPorFranquicia(Long idFranquicia) {
+    public List<ProductoConSucursalDto> getProductosConMasStockPorFranquicia(Long idFranquicia) {
         // Obtener todas las sucursales de la franquicia
-        List<SucursalDto> sucursales = sucursalService.findByIdFranquicia(idFranquicia);
-    
-        List<ProductoDto> productosConMasStock = new ArrayList<>();  // Lista de ProductoDto
-    
+        List<Sucursal> sucursales = sucursalService.findByIdFranquicia(idFranquicia);
+        
+        List<ProductoConSucursalDto> productosConMasStock = new ArrayList<>();  // Lista de ProductoConSucursalDto
+        
         // Iterar por cada sucursal y obtener el producto con más stock
-        for (SucursalDto sucursalDto : sucursales) {
+        for (Sucursal sucursal : sucursales) {
+            
             // Obtener el producto con más stock para la sucursal
-            Producto productoConMasStock = productoRepository.findTopBySucursalOrderByStockDesc(sucursalDto);
+            Producto productoConMasStock = productoRepository.findTopBySucursalOrderByStockDesc(sucursal);
+            
             if (productoConMasStock != null) {
-                // Convertir el Producto a ProductoDto antes de agregarlo
-                ProductoDto productoDto = convertToDto(productoConMasStock);
-                productosConMasStock.add(productoDto);  // Agregar ProductoDto
+                
+                // Convertir el Producto a ProductoConSucursalDto antes de agregarlo
+                ProductoConSucursalDto productoConSucursalDto = new ProductoConSucursalDto(
+                        productoConMasStock.getNombre(), 
+                        productoConMasStock.getStock(),
+                        sucursal.getNombre() // Pasar el nombre de la sucursal
+                );
+                
+                // Añadir el ProductoConSucursalDto a la lista
+                productosConMasStock.add(productoConSucursalDto);
+            } else {
+                System.out.println("No se encontró producto con stock para la sucursal: " + sucursal.getNombre());
             }
         }
-    
-        return productosConMasStock;  // Retornar la lista de ProductoDto
+        
+        return productosConMasStock;  // Retornar la lista de ProductoConSucursalDto
     }
 }

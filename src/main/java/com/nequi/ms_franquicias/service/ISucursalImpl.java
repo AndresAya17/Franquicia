@@ -67,13 +67,10 @@ public class ISucursalImpl implements ISucursalService {
     }
 
     @Override
-    public List<SucursalDto> findByIdFranquicia(Long idFranquicia) {
+    public List<Sucursal> findByIdFranquicia(Long idFranquicia) {
         List<Sucursal> sucursales = sucursalRepository.findByFranquiciaIdFranquicia(idFranquicia);
 
-        // Convertir las sucursales a DTOs
-        return sucursales.stream()
-                         .map(this::convertToDto)  // Convertir cada Sucursal a SucursalDto
-                         .collect(Collectors.toList());
+        return sucursales;
     }
 
 }

@@ -3,7 +3,7 @@ package com.nequi.ms_franquicias.service;
 import java.util.List;
 
 import com.nequi.ms_franquicias.entities.Producto;
-
+import com.nequi.ms_franquicias.entities.ProductoConSucursalDto;
 import com.nequi.ms_franquicias.entities.ProductoDto;
 
 public interface IProductoService {
@@ -13,7 +13,7 @@ public interface IProductoService {
 
     Producto findById(Long id);
 
-    List<ProductoDto> getProductosConMasStockPorFranquicia(Long idFranquicia);
+    List<ProductoConSucursalDto> getProductosConMasStockPorFranquicia(Long idFranquicia);
 
     void deleteById(Long id);
 }

@@ -84,8 +84,8 @@ public class SucursalController {
     }
 
     @GetMapping("/franquicia/{idFranquicia}")
-    public ResponseEntity<List<SucursalDto>> getSucursalesByFranquicia(@PathVariable Long idFranquicia) {
-        List<SucursalDto> sucursalesDto = sucursalService.findByIdFranquicia(idFranquicia);
-        return ResponseEntity.ok(sucursalesDto);
+    public ResponseEntity<List<Sucursal>> getSucursalesByFranquicia(@PathVariable Long idFranquicia) {
+        List<Sucursal> sucursal = sucursalService.findByIdFranquicia(idFranquicia);
+        return ResponseEntity.ok(sucursal);
     }
 }
