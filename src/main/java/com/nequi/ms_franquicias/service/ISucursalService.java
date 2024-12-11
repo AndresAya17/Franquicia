@@ -3,11 +3,12 @@ package com.nequi.ms_franquicias.service;
 import java.util.List;
 
 import com.nequi.ms_franquicias.entities.Sucursal;
+import com.nequi.ms_franquicias.entities.SucursalDto;
 
 public interface ISucursalService {
     void save (Sucursal sucursal);
 
-    List<Sucursal> findAll();
+    List<SucursalDto> findAll();
 
     Sucursal findById(Long id);
 

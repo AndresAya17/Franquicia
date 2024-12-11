@@ -40,5 +40,5 @@ public class Sucursal {
     private Franquicia franquicia;
 
     @OneToMany(mappedBy = "sucursal", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Stock> stocks;
+    private List<Producto> productos;
 }
