@@ -8,6 +8,7 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -98,5 +99,15 @@ public class SucursalController {
         }
         return ResponseEntity.notFound().build();
 
+    }
+
+    @DeleteMapping("/{sucursalId}/productos/{productoId}")
+    public ResponseEntity<Void> eliminarProducto(@PathVariable Long sucursalId, @PathVariable Long productoId) {
+        try {
+            sucursalService.deleteByIdProducto(sucursalId, productoId);
+            return ResponseEntity.noContent().build(); // Código 204 cuando la eliminación es exitosa
+        } catch (IdNotFoundException e) {
+            return ResponseEntity.notFound().build(); // Código 404 si no se encuentra la sucursal o el producto
+        }
     }
 }

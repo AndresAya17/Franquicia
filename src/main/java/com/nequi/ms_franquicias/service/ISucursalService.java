@@ -17,4 +17,6 @@ public interface ISucursalService {
     Sucursal findById(Long id);
 
     void deleteById(Long id);
+
+    void deleteByIdProducto(Long idSucursal, Long idProducto);
 }

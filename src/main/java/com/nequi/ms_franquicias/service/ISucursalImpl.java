@@ -12,6 +12,7 @@ import com.nequi.ms_franquicias.entities.ProductoDto;
 import com.nequi.ms_franquicias.entities.Sucursal;
 import com.nequi.ms_franquicias.entities.SucursalDto;
 import com.nequi.ms_franquicias.exceptions.IdNotFoundException;
+import com.nequi.ms_franquicias.repository.IProductoRepository;
 import com.nequi.ms_franquicias.repository.ISucursalRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class ISucursalImpl implements ISucursalService {
 
     private final ISucursalRepository sucursalRepository;
+    private final IProductoRepository productoRepository;
 
     @Override
     public void save(Sucursal sucursal) {
@@ -86,6 +88,21 @@ public class ISucursalImpl implements ISucursalService {
             return convertToDto(sucursalGuardada);
         }
         return null;
+    }
+
+    @Override
+    public void deleteByIdProducto(Long idSucursal, Long idProducto) {
+        // Buscar la sucursal
+        Sucursal sucursal = sucursalRepository.findById(idSucursal)
+                .orElseThrow(() -> new IdNotFoundException(idSucursal));
+
+        // Buscar el producto en esa sucursal
+        Producto producto = productoRepository.findById(idProducto)
+                .filter(p -> p.getSucursal().equals(sucursal))
+                .orElseThrow(() -> new IdNotFoundException(idProducto));
+
+        // Eliminar el producto
+        productoRepository.delete(producto);
     }
     
 
