@@ -34,7 +34,7 @@ public class IProductoImpl implements IProductoService {
 
     private ProductoDto convertToDto(Producto producto) {
         // Crea el ProductoDto y asigna los campos que necesitas (nombre y stock)
-        return new ProductoDto(producto.getNombre(), producto.getStocks());
+        return new ProductoDto(producto.getNombre(),producto.getStock());
     }
 
     @Override

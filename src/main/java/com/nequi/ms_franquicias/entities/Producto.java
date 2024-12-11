@@ -36,9 +36,7 @@ public class Producto {
     @Column(nullable = false)
     private String nombre;
 
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private List<Stock> stocks;
+    private Long stock;
 
     @ManyToOne
     @JoinColumn(name = "id_sucursal", nullable = false) // Relación con Sucursal

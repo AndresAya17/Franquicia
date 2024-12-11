@@ -13,5 +13,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ProductoDto {
     private String nombre;
-    private List<Stock> stocks;
+    private Long cantidad;
 }

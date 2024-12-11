@@ -47,7 +47,7 @@ public class ISucursalImpl implements ISucursalService {
     private ProductoDto convertProductoToDto(Producto producto) {
         // Crear un ProductoDto con los campos que necesitas, por ejemplo, nombre y
         // stock
-        return new ProductoDto(producto.getNombre(), producto.getStocks()); 
+        return new ProductoDto(producto.getNombre(), producto.getStock()); 
     }
 
     @Override

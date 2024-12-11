@@ -64,15 +64,15 @@ public class ProductoController {
             }
 
             // Guardar el nuevo producto
-        productoService.save(producto);
+            productoService.save(producto);
 
-        // Convertir Producto a ProductoDto antes de devolver la respuesta
-        ProductoDto productoDto = convertToDto(producto);
+            // Convertir Producto a ProductoDto antes de devolver la respuesta
+            ProductoDto productoDto = convertToDto(producto);
 
-        response.put("Message", "Producto creado exitosamente.");
-        // response.put("Producto", productoDto); // Devolver el ProductoDto
+            response.put("Message", "Producto creado exitosamente.");
+            // response.put("Producto", productoDto); // Devolver el ProductoDto
 
-        return ResponseEntity.ok(response);
+            return ResponseEntity.ok(response);
 
         } catch (UserNotFoundException e) {
             response.put("Message", "Franquicia o Sucursal no encontrada.");
@@ -85,12 +85,12 @@ public class ProductoController {
 
     // Función para convertir Producto a ProductoDto
     private ProductoDto convertToDto(Producto producto) {
-    // Asumiendo que el ProductoDto tiene un constructor que acepta el nombre y los stocks
-    return new ProductoDto(producto.getNombre(), producto.getStocks());
-}
+        // Asumiendo que el ProductoDto tiene un constructor que acepta el nombre y los
+        // stocks
+        return new ProductoDto(producto.getNombre(), producto.getStock());
+    }
 
-
-@GetMapping("/all")
+    @GetMapping("/all")
     public ResponseEntity<?> findAll() {
         return ResponseEntity.ok(productoService.findAll());
     }
