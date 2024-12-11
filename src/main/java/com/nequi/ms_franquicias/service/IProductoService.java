@@ -9,6 +9,8 @@ import com.nequi.ms_franquicias.entities.ProductoDto;
 public interface IProductoService {
     void save (Producto producto);
 
+    ProductoDto updateName(Long id, String name);
+
     List<ProductoDto> findAll();
 
     Producto findById(Long id);

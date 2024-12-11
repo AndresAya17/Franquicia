@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -87,5 +88,15 @@ public class SucursalController {
     public ResponseEntity<List<Sucursal>> getSucursalesByFranquicia(@PathVariable Long idFranquicia) {
         List<Sucursal> sucursal = sucursalService.findByIdFranquicia(idFranquicia);
         return ResponseEntity.ok(sucursal);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<SucursalDto> updateNameSucursal(@PathVariable Long id, @RequestBody SucursalDto sucursalDto){
+        SucursalDto sucursalActualizada = sucursalService.updateName(id, sucursalDto.getNombre());
+        if (sucursalActualizada != null){
+            return ResponseEntity.ok(sucursalActualizada);
+        }
+        return ResponseEntity.notFound().build();
+
     }
 }

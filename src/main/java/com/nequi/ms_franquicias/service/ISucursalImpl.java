@@ -1,6 +1,7 @@
 package com.nequi.ms_franquicias.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -69,8 +70,23 @@ public class ISucursalImpl implements ISucursalService {
     @Override
     public List<Sucursal> findByIdFranquicia(Long idFranquicia) {
         List<Sucursal> sucursales = sucursalRepository.findByFranquiciaIdFranquicia(idFranquicia);
-
         return sucursales;
     }
+
+    @Override
+    public SucursalDto updateName(Long id, String nombre) {
+        Optional<Sucursal> sucursalOptional = sucursalRepository.findById(id);
+
+        if(sucursalOptional.isPresent()){
+            Sucursal sucursal =sucursalOptional.get();
+            sucursal.setNombre(nombre);
+
+            Sucursal sucursalGuardada = sucursalRepository.save(sucursal);
+
+            return convertToDto(sucursalGuardada);
+        }
+        return null;
+    }
+    
 
 }

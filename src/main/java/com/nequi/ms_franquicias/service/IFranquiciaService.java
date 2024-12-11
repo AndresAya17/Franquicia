@@ -11,6 +11,8 @@ public interface IFranquiciaService {
 
     List<FranquiciaDto> findAll();
 
+    FranquiciaDto updateName(Long id, String nombre); 
+
     Franquicia findById(Long id);
 
     void deleteById(Long id);

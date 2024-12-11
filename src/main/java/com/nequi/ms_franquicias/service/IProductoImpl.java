@@ -2,6 +2,7 @@ package com.nequi.ms_franquicias.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -11,7 +12,6 @@ import com.nequi.ms_franquicias.entities.Producto;
 import com.nequi.ms_franquicias.entities.ProductoConSucursalDto;
 import com.nequi.ms_franquicias.entities.ProductoDto;
 import com.nequi.ms_franquicias.entities.Sucursal;
-import com.nequi.ms_franquicias.entities.SucursalDto;
 import com.nequi.ms_franquicias.exceptions.IdNotFoundException;
 import com.nequi.ms_franquicias.repository.IProductoRepository;
 
@@ -90,5 +90,19 @@ public class IProductoImpl implements IProductoService {
         }
         
         return productosConMasStock;  // Retornar la lista de ProductoConSucursalDto
+    }
+
+    @Override
+    public ProductoDto updateName(Long id, String name) {
+        Optional<Producto> productoOptional = productoRepository.findById(id);
+        if (productoOptional.isPresent()){
+            Producto producto = productoOptional.get();
+            producto.setNombre(name);
+
+            Producto productoGuardado = productoRepository.save(producto);
+
+            return convertToDto(productoGuardado);
+        }
+        return null;
     }
 }

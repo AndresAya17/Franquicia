@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -163,6 +164,15 @@ public class ProductoController {
             @PathVariable Long idFranquicia) {
         List<ProductoConSucursalDto> productos = productoService.getProductosConMasStockPorFranquicia(idFranquicia);
         return ResponseEntity.ok(productos);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductoDto> updateName(@PathVariable Long id, @RequestBody ProductoDto productoDto){
+        ProductoDto productoActualizado = productoService.updateName(id, productoDto.getNombre());
+        if (productoActualizado != null) {
+            return ResponseEntity.ok(productoActualizado);
+        }
+        return ResponseEntity.notFound().build();
     }
 
 }

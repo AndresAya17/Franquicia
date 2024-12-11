@@ -1,6 +1,7 @@
 package com.nequi.ms_franquicias.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -50,11 +51,11 @@ public class IFranquiciaImpl implements IFranquiciaService {
         List<ProductoDto> productosDto = sucursal.getProductos().stream()
                 .map(this::convertProductoToDto)
                 .collect(Collectors.toList());
-    
+
         // Crear y devolver el DTO de Sucursal con la lista de ProductoDto
         return new SucursalDto(sucursal.getNombre(), productosDto);
     }
-    
+
     private ProductoDto convertProductoToDto(Producto producto) {
         // Convertir cada Producto a ProductoDto
         return new ProductoDto(producto.getNombre(), producto.getStock());
@@ -74,6 +75,22 @@ public class IFranquiciaImpl implements IFranquiciaService {
             throw new IdNotFoundException(id);
         }
         franquiciaRepository.deleteById(id);
+    }
+
+    @Override
+    public FranquiciaDto updateName(Long id, String nombre) {
+        Optional<Franquicia> franquiciaOptional = franquiciaRepository.findById(id);
+        if (franquiciaOptional.isPresent()) {
+            Franquicia franquicia = franquiciaOptional.get();
+            franquicia.setNombre(nombre);
+
+            // Guardar la entidad actualizada en la base de datos
+            Franquicia franquiciaGuardada = franquiciaRepository.save(franquicia);
+
+            // Convertir la entidad actualizada a FranquiciaDto y devolverla
+            return convertToDto(franquiciaGuardada);
+        }
+        return null;
     }
 
 }
