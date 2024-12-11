@@ -10,7 +10,7 @@ import com.nequi.ms_franquicias.entities.Producto;
 import com.nequi.ms_franquicias.entities.ProductoDto;
 import com.nequi.ms_franquicias.entities.Sucursal;
 import com.nequi.ms_franquicias.entities.SucursalDto;
-import com.nequi.ms_franquicias.exceptions.UserNotFoundException;
+import com.nequi.ms_franquicias.exceptions.IdNotFoundException;
 import com.nequi.ms_franquicias.repository.ISucursalRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -53,7 +53,7 @@ public class ISucursalImpl implements ISucursalService {
     @Override
     public Sucursal findById(Long id) {
         var sucursal = sucursalRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+                .orElseThrow(() -> new IdNotFoundException(id));
 
         return sucursal;
     }
@@ -61,9 +61,19 @@ public class ISucursalImpl implements ISucursalService {
     @Override
     public void deleteById(Long id) {
         if (!sucursalRepository.existsById(id)) {
-            throw new UserNotFoundException(id);
+            throw new IdNotFoundException(id);
         }
         sucursalRepository.deleteById(id);
+    }
+
+    @Override
+    public List<SucursalDto> findByIdFranquicia(Long idFranquicia) {
+        List<Sucursal> sucursales = sucursalRepository.findByFranquiciaIdFranquicia(idFranquicia);
+
+        // Convertir las sucursales a DTOs
+        return sucursales.stream()
+                         .map(this::convertToDto)  // Convertir cada Sucursal a SucursalDto
+                         .collect(Collectors.toList());
     }
 
 }

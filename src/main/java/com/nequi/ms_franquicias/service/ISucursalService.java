@@ -10,6 +10,8 @@ public interface ISucursalService {
 
     List<SucursalDto> findAll();
 
+    List<SucursalDto> findByIdFranquicia(Long idFranquicia);
+
     Sucursal findById(Long id);
 
     void deleteById(Long id);

@@ -12,7 +12,7 @@ import com.nequi.ms_franquicias.entities.Producto;
 import com.nequi.ms_franquicias.entities.ProductoDto;
 import com.nequi.ms_franquicias.entities.Sucursal;
 import com.nequi.ms_franquicias.entities.SucursalDto;
-import com.nequi.ms_franquicias.exceptions.UserNotFoundException;
+import com.nequi.ms_franquicias.exceptions.IdNotFoundException;
 import com.nequi.ms_franquicias.repository.IFranquiciaRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -63,7 +63,7 @@ public class IFranquiciaImpl implements IFranquiciaService {
     @Override
     public Franquicia findById(Long id) {
         var franquicia = franquiciaRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+                .orElseThrow(() -> new IdNotFoundException(id));
 
         return franquicia;
     }
@@ -71,7 +71,7 @@ public class IFranquiciaImpl implements IFranquiciaService {
     @Override
     public void deleteById(Long id) {
         if (!franquiciaRepository.existsById(id)) {
-            throw new UserNotFoundException(id);
+            throw new IdNotFoundException(id);
         }
         franquiciaRepository.deleteById(id);
     }

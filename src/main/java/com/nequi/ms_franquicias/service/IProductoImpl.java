@@ -1,5 +1,6 @@
 package com.nequi.ms_franquicias.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -8,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.nequi.ms_franquicias.entities.Producto;
 import com.nequi.ms_franquicias.entities.ProductoDto;
-import com.nequi.ms_franquicias.exceptions.UserNotFoundException;
+import com.nequi.ms_franquicias.entities.Sucursal;
+import com.nequi.ms_franquicias.entities.SucursalDto;
+import com.nequi.ms_franquicias.exceptions.IdNotFoundException;
 import com.nequi.ms_franquicias.repository.IProductoRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -18,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class IProductoImpl implements IProductoService {
 
     private final IProductoRepository productoRepository;
+    private final ISucursalService sucursalService;
 
     @Override
     public void save(Producto producto) {
@@ -34,15 +38,15 @@ public class IProductoImpl implements IProductoService {
 
     private ProductoDto convertToDto(Producto producto) {
         // Crea el ProductoDto y asigna los campos que necesitas (nombre y stock)
-        return new ProductoDto(producto.getNombre(),producto.getStock());
+        return new ProductoDto(producto.getNombre(), producto.getStock());
     }
 
     @Override
     public Producto findById(Long id) {
         // Encuentra el producto por id y si no lo encuentra lanza una excepción
         var producto = productoRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id)); // Aquí puedes usar orElseThrow()
-        
+                .orElseThrow(() -> new IdNotFoundException(id)); // Aquí puedes usar orElseThrow()
+
         return producto;
     }
 
@@ -50,8 +54,29 @@ public class IProductoImpl implements IProductoService {
     public void deleteById(Long id) {
         // Verifica si el producto existe antes de eliminarlo
         if (!productoRepository.existsById(id)) {
-            throw new UserNotFoundException(id);
+            throw new IdNotFoundException(id);
         }
         productoRepository.deleteById(id);
+    }
+
+    @Override
+    public List<ProductoDto> getProductosConMasStockPorFranquicia(Long idFranquicia) {
+        // Obtener todas las sucursales de la franquicia
+        List<SucursalDto> sucursales = sucursalService.findByIdFranquicia(idFranquicia);
+    
+        List<ProductoDto> productosConMasStock = new ArrayList<>();  // Lista de ProductoDto
+    
+        // Iterar por cada sucursal y obtener el producto con más stock
+        for (SucursalDto sucursalDto : sucursales) {
+            // Obtener el producto con más stock para la sucursal
+            Producto productoConMasStock = productoRepository.findTopBySucursalOrderByStockDesc(sucursalDto);
+            if (productoConMasStock != null) {
+                // Convertir el Producto a ProductoDto antes de agregarlo
+                ProductoDto productoDto = convertToDto(productoConMasStock);
+                productosConMasStock.add(productoDto);  // Agregar ProductoDto
+            }
+        }
+    
+        return productosConMasStock;  // Retornar la lista de ProductoDto
     }
 }

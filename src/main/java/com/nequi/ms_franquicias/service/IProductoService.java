@@ -13,5 +13,7 @@ public interface IProductoService {
 
     Producto findById(Long id);
 
+    List<ProductoDto> getProductosConMasStockPorFranquicia(Long idFranquicia);
+
     void deleteById(Long id);
 }

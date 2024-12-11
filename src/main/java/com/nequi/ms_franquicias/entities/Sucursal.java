@@ -37,6 +37,6 @@ public class Sucursal {
     @JoinColumn(name = "id_franquicia", nullable = false)
     private Franquicia franquicia;
 
-    @OneToMany(mappedBy = "sucursal", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "sucursal", cascade = CascadeType.PERSIST)
     private List<Producto> productos;
 }

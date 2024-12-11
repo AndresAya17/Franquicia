@@ -19,7 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.nequi.ms_franquicias.entities.Franquicia;
 import com.nequi.ms_franquicias.entities.Sucursal;
-import com.nequi.ms_franquicias.exceptions.UserNotFoundException;
+import com.nequi.ms_franquicias.entities.SucursalDto;
+import com.nequi.ms_franquicias.exceptions.IdNotFoundException;
 import com.nequi.ms_franquicias.service.IFranquiciaService;
 import com.nequi.ms_franquicias.service.ISucursalService;
 
@@ -71,8 +72,8 @@ public class SucursalController {
         return ResponseEntity.ok(sucursalService.findById(id));
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<?> handleUserNotFoundException(UserNotFoundException ex) {
+    @ExceptionHandler(IdNotFoundException.class)
+    public ResponseEntity<?> handleUserNotFoundException(IdNotFoundException ex) {
         // Retorna un 404 con el mensaje de la excepción
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
@@ -80,5 +81,11 @@ public class SucursalController {
     @PostMapping("/delete/{id}")
     public void deleteById(@PathVariable Long id) {
         sucursalService.deleteById(id);
+    }
+
+    @GetMapping("/franquicia/{idFranquicia}")
+    public ResponseEntity<List<SucursalDto>> getSucursalesByFranquicia(@PathVariable Long idFranquicia) {
+        List<SucursalDto> sucursalesDto = sucursalService.findByIdFranquicia(idFranquicia);
+        return ResponseEntity.ok(sucursalesDto);
     }
 }

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nequi.ms_franquicias.entities.Franquicia;
-import com.nequi.ms_franquicias.exceptions.UserNotFoundException;
+import com.nequi.ms_franquicias.exceptions.IdNotFoundException;
 import com.nequi.ms_franquicias.service.IFranquiciaService;
 
 import jakarta.validation.Valid;
@@ -61,8 +61,8 @@ public class FranquiciaController {
         return ResponseEntity.ok(franquiciaService.findById(id));
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<?> handleUserNotFoundException(UserNotFoundException ex) {
+    @ExceptionHandler(IdNotFoundException.class)
+    public ResponseEntity<?> handleUserNotFoundException(IdNotFoundException ex) {
         // Retorna un 404 con el mensaje de la excepción
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
