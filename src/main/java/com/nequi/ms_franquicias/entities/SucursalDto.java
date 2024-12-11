@@ -14,6 +14,6 @@ import lombok.Setter;
 public class SucursalDto {
 
     private String nombre;
-    private List<ProductoDto> productoDtos;
+    private List<ProductoDto> productos;
     
 }

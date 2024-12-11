@@ -11,7 +11,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductoDto {
+public class FranquiciaDto {
+
     private String nombre;
-    private Long stock;
+    private List<SucursalDto> sucursal;
 }

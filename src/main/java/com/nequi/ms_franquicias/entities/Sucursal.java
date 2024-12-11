@@ -2,7 +2,6 @@ package com.nequi.ms_franquicias.entities;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -36,7 +35,6 @@ public class Sucursal {
 
     @ManyToOne
     @JoinColumn(name = "id_franquicia", nullable = false)
-    @JsonBackReference
     private Franquicia franquicia;
 
     @OneToMany(mappedBy = "sucursal", cascade = CascadeType.ALL, orphanRemoval = true)
