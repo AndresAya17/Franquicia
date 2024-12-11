@@ -18,25 +18,28 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nequi.ms_franquicias.entities.Franquicia;
+import com.nequi.ms_franquicias.entities.Sucursal;
 import com.nequi.ms_franquicias.exceptions.UserNotFoundException;
 import com.nequi.ms_franquicias.service.IFranquiciaService;
+import com.nequi.ms_franquicias.service.ISucursalService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/franquicia")
+@RequestMapping("/api/sucursal")
 @RequiredArgsConstructor
-public class FranquiciaController {
+public class SucursalController {
 
+    private final ISucursalService sucursalService;
     private final IFranquiciaService franquiciaService;
-
+    
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> SaveFranquicia(@Valid @RequestBody Franquicia franquicia, BindingResult bindingResult) {
-
+    public ResponseEntity<?> SaveSucursal(@Valid @RequestBody Sucursal sucursal, BindingResult bindingResult) {
         Map<String, Object> response = new HashMap<>();
 
+        // Validar errores en la solicitud
         if (bindingResult.hasFieldErrors()) {
             List<String> errors = bindingResult.getFieldErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
@@ -45,20 +48,27 @@ public class FranquiciaController {
             return ResponseEntity.badRequest().body(errors);
         }
 
+        // Verificar que la franquicia exista usando el servicio
+        Franquicia franquicia = franquiciaService.findById(sucursal.getFranquicia().getIdFranquicia());
+
+        // Asociar la franquicia a la sucursal
+        sucursal.setFranquicia(franquicia);
+
+        // Guardar la sucursal
+        sucursalService.save(sucursal);
+
         response.put("Message", "Exitoso");
-        franquiciaService.save(franquicia);
         return ResponseEntity.ok(response);
     }
 
-    
-     @GetMapping("/all")
-    public ResponseEntity<?> findAll(){
-        return ResponseEntity.ok(franquiciaService.findAll());
+    @GetMapping("/all")
+    public ResponseEntity<?> findAll() {
+        return ResponseEntity.ok(sucursalService.findAll());
     }
 
     @GetMapping("/search/{id}")
-    public ResponseEntity<?> findById(@PathVariable Long id){
-        return ResponseEntity.ok(franquiciaService.findById(id));
+    public ResponseEntity<?> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(sucursalService.findById(id));
     }
 
     @ExceptionHandler(UserNotFoundException.class)
@@ -68,8 +78,7 @@ public class FranquiciaController {
     }
 
     @PostMapping("/delete/{id}")
-    public void deleteById(@PathVariable Long id){
-        franquiciaService.deleteById(id);
+    public void deleteById(@PathVariable Long id) {
+        sucursalService.deleteById(id);
     }
-    
 }
